@@ -7,6 +7,6 @@
   "imaginebook.gui.used": "Місця залишилось на сторінці: %d",
   "imaginebook.gui.urlhere": "Вставте посилання сюди",
   "imaginebook.gui.extended.false": "Звичайний режим",
-  "imaginebook.gui.extended.true": "Розширений режим"
-
+  "imaginebook.gui.extended.true": "Розширений режим",
+  "imaginebook.error.paste_too_large": "Вставлення перевищить ліміт книги у %s сторінок. Текст не змінено."
 }

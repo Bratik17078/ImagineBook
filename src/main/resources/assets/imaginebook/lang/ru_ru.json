@@ -7,6 +7,6 @@
   "imaginebook.gui.used": "Места осталось на странице: %d",
   "imaginebook.gui.urlhere": "Вставьте ссылку сюда",
   "imaginebook.gui.extended.false": "Обычный режим",
-  "imaginebook.gui.extended.true": "Расширеный режим"
-
+  "imaginebook.gui.extended.true": "Расширеный режим",
+  "imaginebook.error.paste_too_large": "Вставка превысит лимит книги в %s страниц. Текст не изменён."
 }

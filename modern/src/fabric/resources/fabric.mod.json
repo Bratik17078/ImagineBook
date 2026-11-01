@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "imaginebook",
+  "version": "${version}",
+  "name": "ImagineBook",
+  "description": "Add images to written and writable books.",
+  "authors": ["JavaJumper", "Riflusso"],
+  "contact": { "sources": "https://github.com/JumperOnJava/ImagineBook" },
+  "license": "LGPL-3.0-only",
+  "icon": "assets/imaginebook/icon.png",
+  "environment": "client",
+  "entrypoints": { "client": ["io.github.jumperonjava.imaginebook.platform.PlatformEntrypoint"] },
+  "mixins": ["imaginebook.mixins.json"],
+  "depends": { "fabricloader": ">=0.20.1", "fabric-api": "*", "minecraft": "${minecraft}", "java": ">=25" }
+}

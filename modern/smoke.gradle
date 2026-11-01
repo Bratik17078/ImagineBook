@@ -1,0 +1,22 @@
+// A separate development-only mod validates Mixin transformations without opening a window.
+sourceSets {
+    smoke {
+        java.srcDir rootProject.file('src/smoke/java')
+        resources.srcDir rootProject.file('src/smoke/resources')
+        compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+def smokeJar = tasks.register('smokeJar', Jar) {
+    archiveClassifier = 'smoke-test'
+    from sourceSets.smoke.output
+}
+loom.runs {
+    mixinSmoke {
+        client()
+        vmArg "-Dfabric.addMods=${smokeJar.get().archiveFile.get().asFile.absolutePath}"
+        vmArg '-Dmixin.debug.countInjections=true'
+        runDir 'build/mixin-smoke'
+    }
+}
+tasks.named('runMixinSmoke') { dependsOn smokeJar }

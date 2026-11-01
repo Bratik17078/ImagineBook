@@ -1,0 +1,75 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version '1.19.3' apply false
+    id 'net.neoforged.moddev' version '2.0.148' apply false
+}
+
+def modVersion = '1.2.9'
+
+subprojects {
+    def (mc, loader) = name.split('-', 2)
+    apply plugin: 'java-library'
+    apply plugin: loader == 'fabric' ? 'net.fabricmc.fabric-loom' : 'net.neoforged.moddev'
+
+    version = "${modVersion}+${mc}"
+    group = 'io.github.jumperonjava'
+    base.archivesName = "imaginebook-${loader}"
+    java {
+        toolchain.languageVersion = JavaLanguageVersion.of(25)
+        withSourcesJar()
+    }
+    repositories { mavenCentral() }
+    sourceSets.main {
+        java.srcDirs = [rootProject.file('src/main/java'), rootProject.file("src/${loader}/java"), rootProject.file("src/${mc}/java")]
+        resources.srcDirs = [rootProject.file('src/main/resources'), rootProject.file("src/${loader}/resources")]
+        resources.srcDir(rootProject.file('../src/main/resources'))
+        resources.include('assets/imaginebook/**/*.png', 'assets/imaginebook/lang/*.json',
+                'imaginebook.mixins.json', 'fabric.mod.json', 'META-INF/neoforge.mods.toml')
+        // Legacy loader metadata is replaced by the modern loader-specific files.
+        resources.exclude { !it.isDirectory() && it.file.toPath().startsWith(rootProject.file('../src/main/resources').toPath()) && !it.path.startsWith('assets/') }
+    }
+    dependencies {
+        implementation 'org.sejda.imageio:webp-imageio:0.1.6'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.4'
+    }
+    sourceSets.test.java.srcDir(rootProject.file('src/test/java'))
+    test { useJUnitPlatform() }
+    if (loader == 'fabric') {
+        dependencies {
+            minecraft "com.mojang:minecraft:${mc}"
+            implementation 'net.fabricmc:fabric-loader:0.20.1'
+            runtimeOnly "net.fabricmc.fabric-api:fabric-api:${mc == '26.2' ? '0.161.0+26.2' : '0.165.0+26.3'}"
+            include 'org.sejda.imageio:webp-imageio:0.1.6'
+        }
+        loom { mods { imaginebook { sourceSet sourceSets.main } } }
+        apply from: rootProject.file('smoke.gradle')
+    } else {
+        neoForge {
+            enable {
+                version = mc == '26.2' ? '26.2.0.93' : '26.3.0.100'
+                disableRecompilation = true
+            }
+            runs { client { client() } }
+            mods { imaginebook { sourceSet sourceSets.main } }
+        }
+        dependencies { jarJar 'org.sejda.imageio:webp-imageio:0.1.6' }
+    }
+    tasks.withType(JavaCompile).configureEach {
+        options.release = 25
+        options.encoding = 'UTF-8'
+    }
+    processResources {
+        inputs.properties(version: project.version, minecraft: mc)
+        filesMatching(['fabric.mod.json', 'META-INF/neoforge.mods.toml']) {
+            expand(version: project.version, minecraft: mc)
+        }
+    }
+    jar { from(rootProject.file('../LICENSE')) }
+}
+
+tasks.register('build') { dependsOn subprojects.collect { it.tasks.named('build') } }
+tasks.register('collectJars', Copy) {
+    dependsOn tasks.named('build')
+    subprojects.each { from it.tasks.named('jar') }
+    into rootProject.file('../build/libs/26.x')
+}

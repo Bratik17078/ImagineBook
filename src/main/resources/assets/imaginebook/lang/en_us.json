@@ -7,5 +7,6 @@
   "imaginebook.gui.used": "Space left on page: %d",
   "imaginebook.gui.urlhere": "Paste link here",
   "imaginebook.gui.extended.false": "Mode: Default",
-  "imaginebook.gui.extended.true": "Mode: Extended"
+  "imaginebook.gui.extended.true": "Mode: Extended",
+  "imaginebook.error.paste_too_large": "Paste would exceed the %s-page book limit. No text was changed."
 }

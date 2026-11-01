@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.jumperonjava.imaginebook.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": ["BookScreenMixin", "NewBookEditScreenMixin", "MinecraftClientMixin", "MultiLineEditBoxAccessor", "MultilineTextFieldAccessor", "RenderPipelineAccessor"],
+  "injectors": { "defaultRequire": 1 }
+}

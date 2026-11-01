@@ -1,0 +1,27 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "LGPL-3.0-only"
+issueTrackerURL = "https://github.com/JumperOnJava/ImagineBook/issues"
+
+[[mods]]
+modId = "imaginebook"
+version = "${version}"
+displayName = "ImagineBook"
+authors = "JavaJumper, Riflusso"
+description = "Add images to written and writable books."
+logoFile = "assets/imaginebook/icon.png"
+
+[[mixins]]
+config = "imaginebook.mixins.json"
+
+[[dependencies.imaginebook]]
+modId = "minecraft"
+type = "required"
+versionRange = "[${minecraft}]"
+side = "CLIENT"
+
+[[dependencies.imaginebook]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${minecraft}.0,)"
+side = "CLIENT"
